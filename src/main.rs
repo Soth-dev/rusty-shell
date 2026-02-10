@@ -1,6 +1,6 @@
 //#[allow(unused_imports)]
 use std::{
-    env::var,
+    env::{current_dir, var},
     fs::metadata,
     io::{self, Write},
     os::unix::fs::PermissionsExt,
@@ -27,8 +27,9 @@ fn main() {
             "" => continue,
             "exit" => break,
             "echo" => println!("{}", args),
+            "pwd" => println!("{}", current_dir().expect("err").display()),
             "type" => match args {
-                "echo" | "exit" | "type" => println!("{} is a shell builtin", args),
+                "echo" | "exit" | "type" | "pwd" => println!("{} is a shell builtin", args),
                 _ => match check_exec(&paths, args) {
                     Some(path) => println!("{} is {}", args, path),
                     _ => println!("{}: not found", args),
